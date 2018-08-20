@@ -8,13 +8,20 @@ import os
 import requests
 import json
 import pymysql
+import time
 
 
 class WeatherPipeline(object):
+    # 时间戳
+    ticks = str(round(time.time()))
+
     def process_item(self, item, spider):
+        # 获取当前时间
+        timeVal = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
         # 获取当前工作目录
         baseDir = os.getcwd()
-        filename = baseDir + '\\weather\\data\\weather.txt'
+        filename = baseDir + '\\weather\\data\\weather' + self.ticks + '.txt'
 
         with open(filename, 'a', encoding='utf-8') as f:
             f.write(item['date'] + ' ')
@@ -24,16 +31,22 @@ class WeatherPipeline(object):
             f.write(item['wind'] + '\n')
 
         # 下载图片
-        with open(baseDir + '\\weather\\data\\' + item['date'] + '.png', 'wb') as f:
+        with open(baseDir + '\\weather\\data\\image\\' + item['date'] + '.png', 'wb') as f:
             f.write(requests.get(item['img']).content)
         return item
 
 
 class W2json(object):
+    # 时间戳
+    ticks = str(round(time.time()))
+
     def process_item(self, item, spider):
+        # 获取当前时间
+        timeVal = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
         # 获取当前工作目录
         baseDir = os.getcwd()
-        filename = baseDir + '\\weather\\data\\weather.json'
+        filename = baseDir + '\\weather\\data\\weather' + self.ticks + '.json'
 
         # ensure_ascii = False 防止中文输出ASCII码
         # indent = 4 格式化json操作

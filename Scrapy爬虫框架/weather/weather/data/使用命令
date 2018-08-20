@@ -1,0 +1,7 @@
+# 创建项目和爬虫
+scrapy startproject weather
+cd weather
+scrapy genspider SZtianqi www.tianqi.com
+
+# 启动项目
+scrapy crawl SZtianqi
